@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Online_Store_Application.Models;
 
 namespace Online_Store_Application.Data
 {
@@ -8,5 +9,6 @@ namespace Online_Store_Application.Data
         {
 
         }
+        public DbSet<Category> Categories { get; set; }
     }
 }
