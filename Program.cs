@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Online_Store_Application.Data;
+using Online_Store_Application.Areas.Admin.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +22,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

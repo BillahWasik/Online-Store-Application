@@ -1,5 +1,5 @@
-﻿@model Online_Store_Application.Models.Category
-
+﻿@using Online_Store_Application.Areas.Admin.Models
+@model Category
 @{
     ViewData["Title"] = "Create";
 }
@@ -38,3 +38,9 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts{
+    @{
+            <partial name="_ValidationScriptsPartial"/>
+    }
+}
+ 
