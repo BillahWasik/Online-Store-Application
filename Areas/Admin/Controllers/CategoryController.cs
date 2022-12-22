@@ -17,8 +17,9 @@ namespace Online_Store_Application.Areas.Admin.Controllers
             var data = await _db.GetCategoryAsync();
             return View(data);
         }
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(bool IsSuccess = false)
         {
+            ViewBag.Success = IsSuccess;
             TempData["success"] = "Category Added Successfully";
             return View();
         }
@@ -30,13 +31,14 @@ namespace Online_Store_Application.Areas.Admin.Controllers
             {
                 await _db.AddCategory(obj);
                 TempData["success"] = "Category Added Successfully";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new {IsSuccess = true});
             }
             return View();
 
         }
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id , bool IsSuccess = false)
         {
+            ViewBag.Success = IsSuccess;
             TempData["success"] = "Category Added Successfully";
             var data = await _db.GetCategoryDetails(id);
             return View(data);
@@ -49,13 +51,14 @@ namespace Online_Store_Application.Areas.Admin.Controllers
             {
                 await _db.EditCategory(obj);
                 TempData["success"] = "Category Updated Successfully";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",  new { IsSuccess = true });
             }
             return View();
 
         }
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id , bool IsSuccess = false)
         {
+            ViewBag.Success = IsSuccess;
             TempData["success"] = "Category Deleted Successfully";
             var data = await _db.GetCategoryDetails(id);
             return View(data);
@@ -66,7 +69,7 @@ namespace Online_Store_Application.Areas.Admin.Controllers
         {
             await _db.DeleteCategory(obj);
             TempData["success"] = "Category Deleted Successfully";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { IsSuccess = true });
         }
     }
 }

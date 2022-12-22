@@ -3,8 +3,14 @@
 @{
     ViewData["Title"] = "Index";
 }
-<partial name="_Notification" />
 
+@if(ViewBag.Success == true)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Congratulations!</strong> New @TempData["success"]!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <div class="container">
     <div class="row">
         <div class="col-6">
@@ -39,6 +45,7 @@
                 <td>
                     <a asp-route-id="@item.Id" asp-action="Edit" class="btn btn-info me-2"> <i class="fas fa-edit"></i> &nbsp; Update</a>
                     <a asp-route-id="@item.Id" asp-action="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i> &nbsp; Delete</a>
+                    <a asp-route-id="@item.Id" asp-area="Admin" asp-controller="Product" asp-action="GetDetails" class="btn btn-info me-2"> <i class="fas fa-edit"></i> &nbsp; Details</a>
                 </td>
             </tr>
         }

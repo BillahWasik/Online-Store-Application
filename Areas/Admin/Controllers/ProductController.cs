@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Online_Store_Application.Areas.Admin.Data;
 using Online_Store_Application.Areas.Admin.Models;
 using Online_Store_Application.Repository;
 
@@ -9,11 +12,20 @@ namespace Online_Store_Application.Areas.Admin.Controllers
     {
         private readonly IProductRepository _db;
         private readonly IWebHostEnvironment _env;
-        public ProductController(IProductRepository db , IWebHostEnvironment env)
+        private readonly ApplicationDbContext _context;
+        public ProductController(IProductRepository db , IWebHostEnvironment env , ApplicationDbContext context)
         {
             this._db = db;
             this._env = env;
+            this._context = context;
         }
+
+        private IEnumerable<Category> CategoryFetch()
+        {
+            var data = _context.Categories.ToList();
+            return data;
+        }
+
         public async Task<IActionResult> Index()
         {
            var data = await _db.GetProductAsync();
@@ -24,71 +36,108 @@ namespace Online_Store_Application.Areas.Admin.Controllers
           var data = await _db.GetProductDetails(id);
             return View(data);  
         }
-        public IActionResult Create()
+        public IActionResult Create(bool IsSuccess =false)
         {
+            TempData["success"] = "Category Added Successfully";
+            ViewBag.Success = IsSuccess;
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(Product obj)
         {
-            if(obj != null)
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
+            if (obj.Image != null)
             {
                 string path = "Image/Product/";
-               var ImageUrl = UploadImage(path,obj.Image);
-                obj.ImageUrl= ImageUrl;
+                path += Guid.NewGuid().ToString() + "_" + obj.Image.FileName;
+                string FullPath = Path.Combine(_env.WebRootPath, path);
+
+                if(obj.ImageUrl != null)
+                {
+                    var OldPath = Path.Combine(_env.WebRootPath, obj.ImageUrl);
+
+                    if (System.IO.File.Exists(OldPath))
+                    {
+                        System.IO.File.Delete(OldPath);
+                    }
+                }
+
+                await obj.Image.CopyToAsync(new FileStream(FullPath, FileMode.Create));
+                obj.ImageUrl = path;
 
                 var data = await _db.AddProduct(obj);
-                RedirectToAction("Index");
+               return RedirectToAction("Index" , new { IsSuccess = true});
 
             }
 
             return View();
         }
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id , bool IsSuccess = false)
         {
+            TempData["success"] = "Category Updated Successfully";
+            ViewBag.Success = IsSuccess;
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
             var data = await _db.GetProductDetails(id);
             return View(data);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(Product obj)
         {
-
-            if (obj != null)
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
+            if (obj.Image != null)
             {
+                string path = "Image/Product/";
+                path += Guid.NewGuid().ToString() + "_" + obj.Image.FileName;
+                string FullPath = Path.Combine(_env.WebRootPath, path);
+
+                if (obj.ImageUrl != null)
+                {
+                    var OldPath = Path.Combine(_env.WebRootPath, obj.ImageUrl);
+
+                    if (System.IO.File.Exists(OldPath))
+                    {
+                        System.IO.File.Delete(OldPath);
+                    }
+                }
+                await obj.Image.CopyToAsync(new FileStream(FullPath, FileMode.Create));
+                obj.ImageUrl = path;
                 var data = await _db.EditProduct(obj);
-                return RedirectToAction("Index"); 
+                return RedirectToAction("Index", new { IsSuccess = true });
             }
 
-                return View();
+                return View(obj);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id , bool IsSuccess = false)
         {
+            TempData["success"] = "Category Deleted Successfully";
+            ViewBag.Success = IsSuccess;
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
             var data = await _db.GetProductDetails(id);
             return View(data);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Product obj)
         {
-            if (obj != null)
+            ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
+            if (obj.ImageUrl != null)
             {
+                var OldPath = Path.Combine(_env.WebRootPath, obj.ImageUrl);
+
+                if (System.IO.File.Exists(OldPath))
+                {
+                    System.IO.File.Delete(OldPath);
+                }
+
+
                 await _db.DeleteProduct(obj);
-                RedirectToAction("Index");
+                return RedirectToAction("Index", new { IsSuccess = true });
             }
-            return View();
+
+            return View(obj);
         }
-
-        private string UploadImage(string path , IFormFile obj)
-        {
-            
-            path += Guid.NewGuid().ToString() + " " + obj.FileName;
-
-            string FullPath = Path.Combine(_env.WebRootPath,path);
-
-            obj.CopyToAsync(new FileStream(FullPath, FileMode.Create));
-
-            return path;
-
-        }
+        
     }
 }
