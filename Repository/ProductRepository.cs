@@ -14,7 +14,7 @@ namespace Online_Store_Application.Repository
 
         public async Task<List<Product>> GetProductAsync()
         {
-            var data = _db.Products.ToListAsync();
+            var data = _db.Products.Include(x => x.Category).ToListAsync();
             return await data;
         }
         public async Task<Product> GetProductDetails(int id)
@@ -37,7 +37,7 @@ namespace Online_Store_Application.Repository
 
                 _db.Products.Update(obj);
                 await _db.SaveChangesAsync();
-            return obj.Id;
+                return obj.Id;
         }
         public async Task<int> DeleteProduct(Product obj)
         {

@@ -41,7 +41,7 @@
                 <td>@item.Title</td>
                 <td>@item.Description</td>
                 <td>@item.Price</td>
-                <td>@item.CategoryId</td>
+                <td>@item.Category.Name</td>
                 <td>
                     <a asp-route-id="@item.Id" asp-action="Edit" class="btn btn-info me-2"> <i class="fas fa-edit"></i> &nbsp; Update</a>
                     <a asp-route-id="@item.Id" asp-action="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i> &nbsp; Delete</a>

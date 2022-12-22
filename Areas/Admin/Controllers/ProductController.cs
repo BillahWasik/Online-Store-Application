@@ -102,12 +102,11 @@ namespace Online_Store_Application.Areas.Admin.Controllers
                     }
                 }
                 await obj.Image.CopyToAsync(new FileStream(FullPath, FileMode.Create));
-                obj.ImageUrl = path;
-                var data = await _db.EditProduct(obj);
-                return RedirectToAction("Index", new { IsSuccess = true });
+                obj.ImageUrl = path; 
             }
-
-                return View(obj);
+            
+                await _db.EditProduct(obj);
+            return RedirectToAction("Index", new { IsSuccess = true });
         }
 
         public async Task<IActionResult> Delete(int id , bool IsSuccess = false)
