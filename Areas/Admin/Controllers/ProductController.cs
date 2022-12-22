@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Online_Store_Application.Areas.Admin.Models;
 using Online_Store_Application.Repository;
 
@@ -30,20 +31,17 @@ namespace Online_Store_Application.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product obj)
         {
-            if(ModelState.IsValid)
+            if(obj != null)
             {
-                //string Folder = "Image/Product";
-                //Folder += Guid.NewGuid().ToString() + " " + obj.Image.FileName;
-
-                //string ServerFolder = Path.Combine(_env.WebRootPath, Folder);
-
-                //await obj.Image.CopyToAsync(new FileStream(ServerFolder, FileMode.Create));
-
-                //obj.ImageUrl = Folder;
+                string path = "Image/Product/";
+               var ImageUrl = UploadImage(path,obj.Image);
+                obj.ImageUrl= ImageUrl;
 
                 var data = await _db.AddProduct(obj);
                 RedirectToAction("Index");
+
             }
+
             return View();
         }
         public async Task<IActionResult> Edit(int id)
@@ -54,12 +52,14 @@ namespace Online_Store_Application.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Product obj)
         {
-            if (ModelState.IsValid)
+
+            if (obj != null)
             {
                 var data = await _db.EditProduct(obj);
-                RedirectToAction("Index");
+                return RedirectToAction("Index"); 
             }
-            return View();
+
+                return View();
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -70,24 +70,25 @@ namespace Online_Store_Application.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Product obj)
         {
-            if (ModelState.IsValid)
+            if (obj != null)
             {
-                var data = await _db.DeleteProduct(obj);
+                await _db.DeleteProduct(obj);
                 RedirectToAction("Index");
             }
             return View();
         }
 
-        private void UploadImage(Product obj)
+        private string UploadImage(string path , IFormFile obj)
         {
-            string Folder = "Image/Product";
-            Folder += Guid.NewGuid().ToString() + " " + obj.Image.FileName;
+            
+            path += Guid.NewGuid().ToString() + " " + obj.FileName;
 
-            string ServerFolder = Path.Combine(_env.WebRootPath,Folder);
+            string FullPath = Path.Combine(_env.WebRootPath,path);
 
-            obj.Image.CopyToAsync(new FileStream(ServerFolder, FileMode.Create));
+            obj.CopyToAsync(new FileStream(FullPath, FileMode.Create));
 
-            obj.ImageUrl = Folder;
+            return path;
+
         }
     }
 }

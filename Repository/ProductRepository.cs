@@ -35,22 +35,16 @@ namespace Online_Store_Application.Repository
         public async Task<int> EditProduct(Product obj)
         {
 
-            if (obj != null)
-            {
                 _db.Products.Update(obj);
                 await _db.SaveChangesAsync();
-            }
             return obj.Id;
         }
         public async Task<int> DeleteProduct(Product obj)
         {
 
-            if (obj != null)
-            {
                 _db.Products.Remove(obj);
                 await _db.SaveChangesAsync();
-            }
-            return obj.Id;
+                return obj.Id;
         }
     }
 }

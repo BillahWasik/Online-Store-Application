@@ -12,6 +12,6 @@ namespace Online_Store_Application.Areas.Admin.Models
         public double Price { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
-        public FormFile Image { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

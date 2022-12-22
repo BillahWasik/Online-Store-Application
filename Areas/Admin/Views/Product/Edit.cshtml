@@ -1,17 +1,19 @@
 ﻿@using Online_Store_Application.Areas.Admin.Models
 @model Product
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data" method="post">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="ImageUrl" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -32,12 +34,13 @@
                 <input asp-for="CategoryId" class="form-control" />
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-            <div class="input-group mt-2 mb-3">
-                <input asp-for="Image" type="file" class="form-control" id="inputGroupFile02">
-               
-            </div>
+
+                <div class="input-group mt-2 mb-3">
+                    <input asp-for="Image" type="file" class="form-control" id="inputGroupFile02">
+                </div>
+                
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Update" class="btn btn-primary" />
             </div>
         </form>
     </div>
