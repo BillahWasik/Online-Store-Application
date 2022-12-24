@@ -19,18 +19,16 @@ namespace Online_Store_Application.Repository
         }
         public async Task<Product> GetProductDetails(int id)
         {
-            var data = _db.Products.Where(x => x.Id == id).FirstOrDefaultAsync();
-            return await data;
+            var data = await _db.Products.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return  data;
         }
         public async Task<Product> AddProduct(Product obj)
         {
-            if (obj != null)
-            {
+           
                 await _db.Products.AddAsync(obj);
                 await _db.SaveChangesAsync();
                 return obj;
-            }
-            return null;
+          
         }
         public async Task<int> EditProduct(Product obj)
         {
@@ -45,6 +43,11 @@ namespace Online_Store_Application.Repository
                 _db.Products.Remove(obj);
                 await _db.SaveChangesAsync();
                 return obj.Id;
+        }
+        public async Task<List<Product>> SearchByPrice( double low , double high)
+        {
+            var data = await _db.Products.Include(x => x.Category).Where(x => x.Price > low && x.Price <= high).ToListAsync();
+            return data;
         }
     }
 }

@@ -31,6 +31,12 @@ namespace Online_Store_Application.Areas.Admin.Controllers
            var data = await _db.GetProductAsync();
             return View(data);
         }
+        [HttpPost]
+        public async Task<IActionResult> Index( double start , double end)
+        {
+            var data = await _db.SearchByPrice(start, end);
+            return View(data);
+        }
         public async Task<IActionResult> GetDetails(int id)
         {
           var data = await _db.GetProductDetails(id);
@@ -48,6 +54,11 @@ namespace Online_Store_Application.Areas.Admin.Controllers
         public async Task<IActionResult> Create(Product obj)
         {
             ViewBag.Category = new SelectList(CategoryFetch(), "Id", "Name");
+
+            if (obj.Image != null)
+            {
+                obj.ImageUrl = "Image/No_Image_Found/NoImage.jpg";
+            }
             if (obj.Image != null)
             {
                 string path = "Image/Product/";

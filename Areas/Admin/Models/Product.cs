@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Online_Store_Application.Areas.Admin.Models
 {
@@ -12,6 +13,7 @@ namespace Online_Store_Application.Areas.Admin.Models
         public double Price { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
-        public IFormFile Image { get; set; }
+
+        public IFormFile Image { get; set; } = null;
     }
 }
