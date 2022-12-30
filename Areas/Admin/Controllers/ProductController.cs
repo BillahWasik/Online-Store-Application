@@ -31,12 +31,12 @@ namespace Online_Store_Application.Areas.Admin.Controllers
            var data = await _db.GetProductAsync();
             return View(data);
         }
-        [HttpPost]
-        public async Task<IActionResult> Index( double start , double end)
-        {
-            var data = await _db.SearchByPrice(start, end);
-            return View(data);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Index( double? start , double? end)
+        //{
+        //    var data = await _db.SearchByPrice(start, end);
+        //    return View(data);
+        //}
         public async Task<IActionResult> GetDetails(int id)
         {
           var data = await _db.GetProductDetails(id);

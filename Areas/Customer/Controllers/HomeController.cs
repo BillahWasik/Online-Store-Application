@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Online_Store_Application.Models;
+using Online_Store_Application.Repository;
 using System.Diagnostics;
 
 namespace Online_Store_Application.Areas.Customer.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IProductRepository _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductRepository db)
         {
-            _logger = logger;
+            this._db = db; 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+           var data = await _db.GetProductAsync();
+            return View(data);
         }
 
         public IActionResult Privacy()

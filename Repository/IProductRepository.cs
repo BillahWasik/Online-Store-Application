@@ -9,6 +9,6 @@ namespace Online_Store_Application.Repository
         Task<int> EditProduct(Product obj);
         Task<List<Product>> GetProductAsync();
         Task<Product> GetProductDetails(int id);
-        Task<List<Product>> SearchByPrice(double low, double high);
+        Task<List<Product>> SearchByPrice(double? low, double? high);
     }
 }

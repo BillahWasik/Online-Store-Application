@@ -44,10 +44,19 @@ namespace Online_Store_Application.Repository
                 await _db.SaveChangesAsync();
                 return obj.Id;
         }
-        public async Task<List<Product>> SearchByPrice( double low , double high)
+        public async Task<List<Product>> SearchByPrice( double? low , double? high)
         {
-            var data = await _db.Products.Include(x => x.Category).Where(x => x.Price > low && x.Price <= high).ToListAsync();
-            return data;
+            if (low == null || high == null)
+            {
+                var reset = await _db.Products.Include(x => x.Category).ToListAsync();
+                return reset;
+            }
+            else
+            {
+                var data = await _db.Products.Include(x => x.Category).Where(x => x.Price > low && x.Price <= high).ToListAsync();
+
+                return data;
+            }
         }
     }
 }

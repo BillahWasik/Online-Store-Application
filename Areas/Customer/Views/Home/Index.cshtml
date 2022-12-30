@@ -1,8 +1,33 @@
-﻿@{
+﻿@using Online_Store_Application.Areas.Admin.Models
+@model IEnumerable<Product>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<div class="container">
+    <div class="row p-2">
+       
+            @foreach (var item in Model)
+            {
+                 <div class="col-3 mb-3">
+                 <div class="card" style="width: 15rem;">
+                  <img src="/@item.ImageUrl" class="card-img-top" width="100" height="250" alt="...">
+                  <hr>
+                  <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@item.Description</p>
+                  </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                  <div class="card-body">
+                        <a href="#" class="card-link btn btn-outline-primary">Details</a>
+                        <a href="#" class="card-link btn btn-outline-info">Buy</a>
+                  </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+
+
+
